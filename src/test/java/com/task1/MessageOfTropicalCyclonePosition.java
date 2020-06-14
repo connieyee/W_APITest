@@ -44,10 +44,13 @@ public class MessageOfTropicalCyclonePosition
     public void isMessageOfTropicalCyclonePositionValid() {
         Response rest = getApi();
         rest.then()
-    		.body("tcmessage",
-                hasItem(
-                    allOf(
-                        isA(String.class)
+    		.body("tcmessage", 
+                anyOf(
+                    isEmptyString(),
+                    hasItem(
+                        allOf(
+                            isA(String.class)
+                        )
                     )
                 )
             );

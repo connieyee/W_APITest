@@ -44,10 +44,13 @@ public class SpecialWeatherTips
     public void isSpecialWeatherTipsValid() {
         Response rest = getApi();
         rest.then()
-    		.body("specialWxTips",
-                hasItem(
-                    allOf(
-                        isA(String.class)
+    		.body("specialWxTips", 
+                anyOf(
+                    isEmptyString(),
+                    hasItem(
+                        allOf(
+                            isA(String.class)
+                        )
                     )
                 )
             );

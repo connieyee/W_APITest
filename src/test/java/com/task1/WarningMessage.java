@@ -36,7 +36,16 @@ public class WarningMessage
     public void isWarningMessageValid() {
         Response rest = getApi();
         rest.then()
-    		.body("warningMessage", anyOf(isA(String.class), isEmptyString()));
+    		.body("warningMessage", 
+                anyOf(
+                    isEmptyString(),
+                    hasItem(
+                        allOf(
+                            isA(String.class)
+                        )
+                    )
+                )
+            );
     }
 
 }
