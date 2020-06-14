@@ -36,7 +36,6 @@ public class Icon
     public void isIconValid() {
         Response rest = getApi();
         rest.then()
-   			// .body("$", hasKey("icon"))
     		.body("icon",
                 hasItem(
                     allOf(
