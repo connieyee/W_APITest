@@ -33,6 +33,7 @@ public class RainFall
     		.get("?dataType=rhrread&lang=en")
    		.then()
    			.body("$", hasKey("rainfall"))
+
    			.body("rainfall.data[0].unit", equalTo("mm"));
     }
 
@@ -45,7 +46,7 @@ public class RainFall
     		.get("?dataType=rhrread&lang=en")
     	.then()
     		.body("$", hasKey("rainfall"))
-    		.body("rainfall.data[0].place", not(isEmptyString()));
+    		.body("rainfall.data[0].place", any(String.class));
     }
 
     @Test(groups={"test"})
@@ -56,6 +57,19 @@ public class RainFall
     	.when()
     		.get("?dataType=rhrread&lang=en")
     	.then()
-    		.body("$", hasKey("rainfall"));
+    		.body("$", hasKey("rainfall"))
+            .body("rainfall.data[0].max", any(Integer.class));
+    }
+
+        @Test(groups={"test"})
+    public void isRainfallMinValid() {
+        RestAssured.given()
+        .relaxedHTTPSValidation()
+    	    .spec(requestSpec)
+    	.when()
+    		.get("?dataType=rhrread&lang=en")
+    	.then()
+    		.body("$", hasKey("rainfall"))
+            .body("rainfall.data[0].min", any(Integer.class));
     }
 }
