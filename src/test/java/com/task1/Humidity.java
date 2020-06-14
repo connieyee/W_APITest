@@ -52,7 +52,8 @@ public class Humidity
     		.body("humidity.data",
                 hasItem(
                     allOf(
-                        hasEntry(equalTo("value"), isA(Integer.class))
+                        hasEntry(equalTo("value"), lessThanOrEqualTo(100)),
+                        hasEntry(equalTo("value"), greaterThanOrEqualTo(0))
                     )
                 )
             );
