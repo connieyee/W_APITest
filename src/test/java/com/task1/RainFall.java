@@ -36,7 +36,6 @@ public class RainFall
     public void isRainfallUnitValid() {
         Response rest = getApi();
         rest.then()
-   			// .body("$", hasKey("rainfall"))
    			.body("rainfall.data",
                 hasItem(
                     allOf(
@@ -50,11 +49,10 @@ public class RainFall
     public void isRainfallPlaceValid() {
         Response rest = getApi();
         rest.then()
-    		// .body("$", hasKey("rainfall"))
     		.body("rainfall.data",
                 hasItem(
                     allOf(
-                        hasEntry("place", isA(String.class))
+                        hasEntry(equalTo("place"), isA(String.class))
                     )
                 )
             );
@@ -64,33 +62,52 @@ public class RainFall
     public void isRainfallMaxExist() {
         Response rest = getApi();
         rest.then()
-    		// .body("$", hasKey("rainfall"))
-            .body("rainfall.data[0]", hasKey("max"));
+            .body("rainfall.data",
+                hasItem(
+                    allOf(
+                        hasKey("max")
+                    )
+                )
+            );
     }
 
     @Test(groups={"test"})
     public void isRainfallMaxValid() {
         Response rest = getApi();
         rest.then()
-    		// .body("$", hasKey("rainfall"))
-            .body("rainfall.data[0].max", any(Integer.class));
+    		.body("rainfall.data",
+                hasItem(
+                    allOf(
+                        hasEntry(equalTo("max"), isA(Integer.class))
+                    )
+                )
+            );
     }
 
     @Test(groups={"test"})
     public void isRainfallMinExist() {
         Response rest = getApi();
         rest.then()
-    		// .body("$", hasKey("rainfall"))
-            .body("$", hasKey("rainfall.data[0].min"));
+            .body("rainfall.data",
+                hasItem(
+                    allOf(
+                        hasKey("min")
+                    )
+                )
+            );
     }
-    
 
     @Test(groups={"test"})
     public void isRainfallMinValid() {
         Response rest = getApi();
         rest.then()
-    		// .body("$", hasKey("rainfall"))
-            .body("rainfall.data[0].min", any(Integer.class));
+    		.body("rainfall.data",
+                hasItem(
+                    allOf(
+                        hasEntry(equalTo("min"), isA(Integer.class))
+                    )
+                )
+            );
     }
 
     @Test(groups={"test"})
@@ -103,6 +120,14 @@ public class RainFall
 
     @Test(groups={"test"})
     public void isRainfallStartTimeValid() {
+        Response rest = getApi();
+        rest.then()
+    		.body("$", hasKey("rainfall"));
+            // .body("rainfall.statTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$));
+    }
+
+    @Test(groups={"test"})
+    public void isRainfallEndTimeValid() {
         Response rest = getApi();
         rest.then()
     		.body("$", hasKey("rainfall"));
