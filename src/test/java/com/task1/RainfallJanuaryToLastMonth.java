@@ -12,8 +12,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
 
-public class RainfallJanuaryToLas
-tMonth
+public class RainfallJanuaryToLastMonth
 {
     
     private static RequestSpecification requestSpec;
