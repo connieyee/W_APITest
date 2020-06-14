@@ -34,12 +34,32 @@ public class Icon
 
     @Test(groups={"test"})
     public void isIconValid() {
+        // WIP
         Response rest = getApi();
         rest.then()
     		.body("icon",
                 hasItem(
-                    allOf(
-                        isA(Integer.class)
+                    anyOf(
+                        allOf(
+                            hasEntry(equalTo("value"), greaterThanOrEqualTo(50)),
+                            hasEntry(equalTo("value"), lessThanOrEqualTo(54))
+                        ),
+                        allOf(
+                            hasEntry(equalTo("value"), greaterThanOrEqualTo(60)),
+                            hasEntry(equalTo("value"), lessThanOrEqualTo(65))
+                        )
+                        allOf(
+                            hasEntry(equalTo("value"), greaterThanOrEqualTo(70)),
+                            hasEntry(equalTo("value"), lessThanOrEqualTo(77))
+                        ),
+                        allOf(
+                            hasEntry(equalTo("value"), greaterThanOrEqualTo(80)),
+                            hasEntry(equalTo("value"), lessThanOrEqualTo(85))
+                        ),
+                        allOf(
+                            hasEntry(equalTo("value"), greaterThanOrEqualTo(90)),
+                            hasEntry(equalTo("value"), lessThanOrEqualTo(93))
+                        )
                     )
                 )
             );
