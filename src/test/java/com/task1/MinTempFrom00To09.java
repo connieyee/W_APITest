@@ -43,7 +43,7 @@ public class MinTempFrom00To09
     public void isRainstormReminderValid() {
         Response rest = getApi();
         rest.then()
-    		.body("mintempFrom00To09", anyOf(isA(String.class), isEmptyString()));
+    		.body("mintempFrom00To09", anyOf(isA(Integer.class), isEmptyString()));
     }
 
 }
