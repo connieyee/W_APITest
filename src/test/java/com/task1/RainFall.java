@@ -11,7 +11,6 @@ import io.restassured.specification.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
-import org.json.JSONArray;
 
 public class RainFall
 {
@@ -20,98 +19,94 @@ public class RainFall
 
     @BeforeClass(groups={"test"})
     public static void createRequestSpecification() {
-        System.out.println("BeforeClassBeforeClassBeforeClassBeforeClassBeforeClass");
     	requestSpec = new RequestSpecBuilder()
     		.setBaseUri("https://data.weather.gov.hk/weatherAPI/opendata/weather.php")
     		.build();
     }
 
+    private Response getApi() {
+        return RestAssured.given()
+            .relaxedHTTPSValidation()
+    	       .spec(requestSpec)
+    	    .when()
+    	    	.get("?dataType=rhrread&lang=en");
+    }
+
     @Test(groups={"test"})
     public void isRainfallUnitValid() {
-        RestAssured.given()
-        .relaxedHTTPSValidation()
-    	    .spec(requestSpec)
-    	.when()
-    		.get("?dataType=rhrread&lang=en")
-   		.then()
-   			.body("$", hasKey("rainfall"))
-
-   			.body("rainfall.data[0].unit", equalTo("mm"));
+        Response rest = getApi();
+        rest.then()
+   			// .body("$", hasKey("rainfall"))
+   			.body("rainfall.data",
+                hasItem(
+                    allOf(
+                        hasEntry("unit", "mm")
+                    )
+                )
+            );
     }
 
     @Test(groups={"test"})
     public void isRainfallPlaceValid() {
-        RestAssured.given()
-        .relaxedHTTPSValidation()
-    	    .spec(requestSpec)
-    	.when()
-    		.get("?dataType=rhrread&lang=en")
-    	.then()
-    		.body("$", hasKey("rainfall"))
-    		.body("rainfall.data[0].place", any(String.class));
+        Response rest = getApi();
+        rest.then()
+    		// .body("$", hasKey("rainfall"))
+    		.body("rainfall.data",
+                hasItem(
+                    allOf(
+                        hasEntry("place", isA(String.class))
+                    )
+                )
+            );
     }
 
     @Test(groups={"test"})
     public void isRainfallMaxExist() {
-        RestAssured.given()
-        .relaxedHTTPSValidation()
-    	    .spec(requestSpec)
-    	.when()
-    		.get("?dataType=rhrread&lang=en")
-    	.then()
-    		.body("$", hasKey("rainfall"))
+        Response rest = getApi();
+        rest.then()
+    		// .body("$", hasKey("rainfall"))
             .body("rainfall.data[0]", hasKey("max"));
     }
 
     @Test(groups={"test"})
     public void isRainfallMaxValid() {
-        RestAssured.given()
-        .relaxedHTTPSValidation()
-    	    .spec(requestSpec)
-    	.when()
-    		.get("?dataType=rhrread&lang=en")
-    	.then()
-    		.body("$", hasKey("rainfall"))
+        Response rest = getApi();
+        rest.then()
+    		// .body("$", hasKey("rainfall"))
             .body("rainfall.data[0].max", any(Integer.class));
     }
 
     @Test(groups={"test"})
     public void isRainfallMinExist() {
-        RestAssured.given()
-        .relaxedHTTPSValidation()
-    	    .spec(requestSpec)
-    	.when()
-    		.get("?dataType=rhrread&lang=en")
-    	.then()
-    		.body("$", hasKey("rainfall"))
+        Response rest = getApi();
+        rest.then()
+    		// .body("$", hasKey("rainfall"))
             .body("$", hasKey("rainfall.data[0].min"));
     }
     
 
     @Test(groups={"test"})
     public void isRainfallMinValid() {
-        RestAssured.given()
-        .relaxedHTTPSValidation()
-    	    .spec(requestSpec)
-    	.when()
-    		.get("?dataType=rhrread&lang=en")
-    	.then()
-    		.body("$", hasKey("rainfall"))
+        Response rest = getApi();
+        rest.then()
+    		// .body("$", hasKey("rainfall"))
             .body("rainfall.data[0].min", any(Integer.class));
     }
 
     @Test(groups={"test"})
     public void isRainfallMainValid() {
-        RestAssured.given()
-        .relaxedHTTPSValidation()
-    	    .spec(requestSpec)
-    	.when()
-    		.get("?dataType=rhrread&lang=en")
-    	.then()
-    		.body("$", hasKey("rainfall"));
-            .body("rainfall.data[0].main", equalTo("TRUE"))
-            .or()
-            .body("rainfall.data[0].main", equalTo("FALSE"));
-
+        Response rest = getApi();
+        rest.then()
+    		// .body("$", hasKey("rainfall"))
+            .body("rainfall.data[0].main", anyOf(equalTo("TRUE"), equalTo("FALSE")));
     }
+
+    @Test(groups={"test"})
+    public void isRainfallStartTimeValid() {
+        Response rest = getApi();
+        rest.then()
+    		.body("$", hasKey("rainfall"));
+            // .body("rainfall.statTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$));
+    }
+
 }
