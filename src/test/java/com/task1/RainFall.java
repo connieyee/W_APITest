@@ -8,12 +8,14 @@ import io.restassured.response.Response;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.*;
 
-import io.restassured.response.Response;
-
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.*;
+
+import org.json.JSONArray;
 
 public class RainFall
 {
+    
     private static RequestSpecification requestSpec;
 
     @BeforeClass(groups={"test"})
@@ -50,6 +52,18 @@ public class RainFall
     }
 
     @Test(groups={"test"})
+    public void isRainfallMaxExist() {
+        RestAssured.given()
+        .relaxedHTTPSValidation()
+    	    .spec(requestSpec)
+    	.when()
+    		.get("?dataType=rhrread&lang=en")
+    	.then()
+    		.body("$", hasKey("rainfall"))
+            .body("rainfall.data[0]", hasKey("max"));
+    }
+
+    @Test(groups={"test"})
     public void isRainfallMaxValid() {
         RestAssured.given()
         .relaxedHTTPSValidation()
@@ -61,7 +75,20 @@ public class RainFall
             .body("rainfall.data[0].max", any(Integer.class));
     }
 
-        @Test(groups={"test"})
+    @Test(groups={"test"})
+    public void isRainfallMinExist() {
+        RestAssured.given()
+        .relaxedHTTPSValidation()
+    	    .spec(requestSpec)
+    	.when()
+    		.get("?dataType=rhrread&lang=en")
+    	.then()
+    		.body("$", hasKey("rainfall"))
+            .body("$", hasKey("rainfall.data[0].min"));
+    }
+    
+
+    @Test(groups={"test"})
     public void isRainfallMinValid() {
         RestAssured.given()
         .relaxedHTTPSValidation()
@@ -71,5 +98,20 @@ public class RainFall
     	.then()
     		.body("$", hasKey("rainfall"))
             .body("rainfall.data[0].min", any(Integer.class));
+    }
+
+    @Test(groups={"test"})
+    public void isRainfallMainValid() {
+        RestAssured.given()
+        .relaxedHTTPSValidation()
+    	    .spec(requestSpec)
+    	.when()
+    		.get("?dataType=rhrread&lang=en")
+    	.then()
+    		.body("$", hasKey("rainfall"));
+            .body("rainfall.data[0].main", equalTo("TRUE"))
+            .or()
+            .body("rainfall.data[0].main", equalTo("FALSE"));
+
     }
 }
