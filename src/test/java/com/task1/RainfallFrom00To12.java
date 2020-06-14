@@ -43,7 +43,7 @@ public class RainfallFrom00To12
     public void isRainfallFrom00To12Valid() {
         Response rest = getApi();
         rest.then()
-    		.body("rainfallFrom00To12", anyOf(isA(Integer.class), isEmptyString()));
+    		.body("rainfallFrom00To12", anyOf(isA(String.class), isEmptyString()));
     }
 
 }

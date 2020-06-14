@@ -12,7 +12,8 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
 
-public class RainfallLastMonth
+public class RainfallJanuaryToLas
+tMonth
 {
     
     private static RequestSpecification requestSpec;
@@ -33,17 +34,17 @@ public class RainfallLastMonth
     }
 
     @Test(groups={"test"})
-    public void isRainfallLastMonthExist() {
+    public void isRainfallJanuaryToLastMonthExist() {
         Response rest = getApi();
         rest.then()
-            .body("$", hasKey("rainfallLastMonth"));
+            .body("$", hasKey("rainfallJanuaryToLastMonth"));
     }
 
     @Test(groups={"test"})
-    public void isRainfallLastMonthValid() {
+    public void isRainfallJanuaryToLastMonthValid() {
         Response rest = getApi();
         rest.then()
-    		.body("rainfallLastMonth", anyOf(isA(String.class), isEmptyString()));
+    		.body("rainfallJanuaryToLastMonth", anyOf(isA(String.class), isEmptyString()));
     }
 
 }
