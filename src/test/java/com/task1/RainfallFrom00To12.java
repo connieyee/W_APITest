@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
 
-public class MinTempFrom00To09
+public class RainfallFrom00To12
 {
     
     private static RequestSpecification requestSpec;
@@ -33,17 +33,17 @@ public class MinTempFrom00To09
     }
 
     @Test(groups={"test"})
-    public void isMinTempFrom00To09Exist() {
+    public void isRainfallFrom00To12Exist() {
         Response rest = getApi();
         rest.then()
-            .body("$", hasKey("mintempFrom00To09"));
+            .body("$", hasKey("rainfallFrom00To12"));
     }
 
     @Test(groups={"test"})
-    public void isMinTempFrom00To09Valid() {
+    public void isRainfallFrom00To12Valid() {
         Response rest = getApi();
         rest.then()
-    		.body("mintempFrom00To09", anyOf(isA(Integer.class), isEmptyString()));
+    		.body("rainfallFrom00To12", anyOf(isA(Integer.class), isEmptyString()));
     }
 
 }
