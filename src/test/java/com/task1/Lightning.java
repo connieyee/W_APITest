@@ -24,25 +24,70 @@ public class Lightning
     		.build();
     }
 
+    private Response getApi() {
+        return RestAssured.given()
+            .relaxedHTTPSValidation()
+    	       .spec(requestSpec)
+    	    .when()
+    	    	.get("?dataType=rhrread&lang=en");
+    }
+
     @Test(groups={"test"})
     public void isLightningExist() {
-        RestAssured.given()
-        .relaxedHTTPSValidation()
-    	    .spec(requestSpec)
-    	.when()
-    		.get("?dataType=rhrread&lang=en")
-   		.then()
+        Response rest = getApi();
+        rest.then()
    			.body("$", hasKey("lightning"));
     }
 
     @Test(groups={"test"})
-        public void isLightningNotExist() {
-            RestAssured.given()
-            .relaxedHTTPSValidation()
-        	    .spec(requestSpec)
-        	.when()
-        		.get("?dataType=rhrread&lang=en")
-       		.then()
-       			.body("lightning", not(hasKey("lightning")));
-        }
+    public void isLightningPlaceValid() {
+        Response rest = getApi();
+        rest.then()
+    		.body("lightning.data",
+                hasItem(
+                    allOf(
+                        hasEntry(equalTo("place"), isA(String.class))
+                    )
+                )
+            );
+    }
+
+    @Test(groups={"test"})
+    public void isLightningOccurValid() {
+        Response rest = getApi();
+        rest.then()
+    		.body("lightning.data",
+                hasItem(
+                    allOf(
+                        hasEntry("occur", "true")
+                    )
+                )
+            );
+    }
+
+    @Test(groups={"test"})
+    public void isLightningStartTimeValid() {
+        Response rest = getApi();
+        rest.then()
+    		.body("lightning",
+                hasItem(
+                    allOf(
+                        // hasEntry("startTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$))
+                    )
+                )
+            );
+    }
+
+    @Test(groups={"test"})
+    public void isLightningEndTimeValid() {
+        Response rest = getApi();
+        rest.then()
+    		.body("lightning",
+                hasItem(
+                    allOf(
+                        // hasEntry("endTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$))
+                    )
+                )
+            );
+    }
 }

@@ -33,6 +33,14 @@ public class UVIndex
     }
 
     @Test(groups={"test"})
+    public void isUVIndexEmpty() {
+        Response rest = getApi();
+        rest.then()
+    		.body("uvindex", isEmptyString());
+    }
+
+
+    @Test(groups={"test"})
     public void isUVIndexPlaceValid() {
         Response rest = getApi();
         rest.then()
