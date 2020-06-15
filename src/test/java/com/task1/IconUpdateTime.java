@@ -1,5 +1,11 @@
 package com.connieyee.test.task1;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import io.restassured.path.json.JsonPath;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
@@ -8,11 +14,13 @@ import io.restassured.response.Response;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.*;
 
+import io.restassured.response.Response;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
 
 
-public class RainstormReminder
+public class IconUpdateTime
 {
     
     private static RequestSpecification requestSpec;
@@ -33,17 +41,16 @@ public class RainstormReminder
     }
 
     @Test(groups={"test"})
-    public void isRainstormReminderExist() {
+    public void isIconUpdateTimeValid() throws ParseException {
         Response rest = getApi();
-        rest.then()
-            .body("$", hasKey("rainstormReminder"));
-    }
+        JsonPath path = JsonPath.from(rest.getBody().asInputStream());
+        String iconUpdateTimeString = path.get("iconUpdateTime");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
+        Date iconUpdateTime = format.parse(iconUpdateTimeString);
+        assertThat("Icon Update time is not in valid time format", iconUpdateTime instanceof Date);
 
-    @Test(groups={"test"})
-    public void isRainstormReminderValid() {
-        Response rest = getApi();
-        rest.then()
-    		.body("rainstormReminder", anyOf(isA(String.class), isEmptyString()));
+        //Check UpdateTime is earlier than current time
+        assertThat("Icon Update Time is not earlier than current time",iconUpdateTime.compareTo(new Date()) < 0);
     }
 
 }

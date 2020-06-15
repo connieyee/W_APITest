@@ -1,6 +1,6 @@
 package com.connieyee.test.task1;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,16 +78,24 @@ public class Lightning
         String startTimeString = path.get("lightning.startTime");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
         Date startTime = format.parse(startTimeString);
-        assertThat("Start time is not valid", startTime instanceof Date);
+        assertThat("Start time is not in valid time format", startTime instanceof Date);
+
+        //Check startTime is earlier than current time
+        assertThat("Start Time is not earlier than current time",startTime.compareTo(new Date()) < 0);
     }
 
      @Test(groups={"test"})
      public void isLightningEndTimeValid() throws ParseException {
          Response rest = getApi();
          JsonPath path = JsonPath.from(rest.getBody().asInputStream());
+         String startTimeString = path.get("lightning.startTime");
          String endTimeString = path.get("lightning.endTime");
          SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
+         Date startTime = format.parse(startTimeString);
          Date endTime = format.parse(endTimeString);
-         assertThat("End time is not valid", endTime instanceof Date);
+         assertThat("End time is not in valid time format", endTime instanceof Date);
+
+         //Check endTime is later than startTime
+         assertThat("End Time is not later than Start Time",endTime.compareTo(startTime) > 0);
      }
 }

@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
-public class iconUpdateTime
+public class UpdateTime
 {
     
     private static RequestSpecification requestSpec;
@@ -41,16 +41,16 @@ public class iconUpdateTime
     }
 
     @Test(groups={"test"})
-    public void isIconUpdateTimeValid() throws ParseException {
+    public void isUpdateTimeValid() throws ParseException {
         Response rest = getApi();
         JsonPath path = JsonPath.from(rest.getBody().asInputStream());
-        String iconUpdateTimeString = path.get("iconUpdateTime");
+        String updateTimeString = path.get("updateTime");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
-        Date iconUpdateTime = format.parse(iconUpdateTimeString);
-        assertThat("Icon Update time is not valid", iconUpdateTime instanceof Date);
+        Date updateTime = format.parse(updateTimeString);
+        assertThat("Update time is not in valid time format", updateTime instanceof Date);
 
-        //Check iconUpdateTime is earlier than current time
-        assertThat((iconUpdateTime.compareTo(new Date()) < 0), is(true));
+        //Check UpdateTime is earlier than current time
+        assertThat("Update Time is not earlier than current time",updateTime.compareTo(new Date()) < 0);
     }
 
 }
