@@ -1,5 +1,7 @@
 package com.connieyee.test.task1;
 
+import java.sql.Timestamp;
+
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
@@ -18,7 +20,6 @@ public class Lightning
 
     @BeforeClass(groups={"test"})
     public static void createRequestSpecification() {
-        System.out.println("BeforeClassBeforeClassBeforeClassBeforeClassBeforeClass");
     	requestSpec = new RequestSpecBuilder()
     		.setBaseUri("https://data.weather.gov.hk/weatherAPI/opendata/weather.php")
     		.build();
@@ -67,27 +68,20 @@ public class Lightning
 
     @Test(groups={"test"})
     public void isLightningStartTimeValid() {
+        // SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss.SSSZ");
+        // String date = simpleDateFormat.format("lightning.data");
+
         Response rest = getApi();
         rest.then()
-    		.body("lightning",
-                hasItem(
-                    allOf(
-                        // hasEntry("startTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$))
-                    )
-                )
+    		.body("lightning.startTime", 
+                instanceOf(Timestamp.class)
             );
     }
 
-    @Test(groups={"test"})
-    public void isLightningEndTimeValid() {
-        Response rest = getApi();
-        rest.then()
-    		.body("lightning",
-                hasItem(
-                    allOf(
-                        // hasEntry("endTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$))
-                    )
-                )
-            );
-    }
+    // @Test(groups={"test"})
+    // public void isLightningEndTimeValid() {
+    //     Response rest = getApi();
+    //     rest.then()
+    //             .body("lightning.endTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?([+/-]\d\d):?(\d\d)?$));?
+    // }
 }

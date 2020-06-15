@@ -47,7 +47,7 @@ public class Icon
                         allOf(
                             hasEntry(equalTo("value"), greaterThanOrEqualTo(60)),
                             hasEntry(equalTo("value"), lessThanOrEqualTo(65))
-                        )
+                        ),
                         allOf(
                             hasEntry(equalTo("value"), greaterThanOrEqualTo(70)),
                             hasEntry(equalTo("value"), lessThanOrEqualTo(77))

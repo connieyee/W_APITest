@@ -1,5 +1,10 @@
-package com.connieyee.test.task1;
+package com.task1;
 
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import io.restassured.path.json.JsonPath;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
@@ -114,22 +119,27 @@ public class RainFall
     public void isRainfallMainValid() {
         Response rest = getApi();
         rest.then()
-    		// .body("$", hasKey("rainfall"))
             .body("rainfall.data[0].main", anyOf(equalTo("TRUE"), equalTo("FALSE")));
     }
 
     @Test(groups={"test"})
-    public void isRainfallStartTimeValid() {
+    public void isRainfallStartTimeValid() throws ParseException {
         Response rest = getApi();
-        rest.then();
-            // .body("rainfall.statTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$));
+        JsonPath path = JsonPath.from(rest.getBody().asInputStream());
+        String startTimeString = path.get("rainfall.startTime");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
+        Date startTime = format.parse(startTimeString);
+        assertThat("Start time is not valid", startTime instanceof Date);
     }
 
     @Test(groups={"test"})
-    public void isRainfallEndTimeValid() {
+    public void isRainfallEndTimeValid() throws ParseException {
         Response rest = getApi();
-        rest.then();
-            // .body("rainfall.statTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$));
+        JsonPath path = JsonPath.from(rest.getBody().asInputStream());
+        String endTimeString = path.get("rainfall.endTime");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
+        Date endTime = format.parse(endTimeString);
+        assertThat("End time is not valid", endTime instanceof Date);
     }
 
 }
