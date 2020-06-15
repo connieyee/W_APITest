@@ -80,9 +80,9 @@ public class Temperature
     public void isTemperatureRecordTimeValid() throws ParseException {
         Response rest = getApi();
         JsonPath path = JsonPath.from(rest.getBody().asInputStream());
-        String startTimeString = path.get("temperature.recordTime");
+        String recordTimeString = path.get("temperature.recordTime");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
-        Date recordTime = format.parse(startTimeString);
+        Date recordTime = format.parse(recordTimeString);
         assertThat("Record time is not valid", recordTime instanceof Date);
     }
    
