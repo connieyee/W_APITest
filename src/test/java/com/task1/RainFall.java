@@ -1,4 +1,4 @@
-package com.task1;
+package com.connieyee.test.task1;
 
 import java.util.Date;
 import java.text.ParseException;

@@ -1,7 +1,11 @@
 package com.connieyee.test.task1;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import io.restassured.path.json.JsonPath;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
@@ -12,6 +16,7 @@ import io.restassured.specification.*;
 
 import io.restassured.response.Response;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class Lightning
@@ -67,21 +72,22 @@ public class Lightning
     }
 
     @Test(groups={"test"})
-    public void isLightningStartTimeValid() {
-        // SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss.SSSZ");
-        // String date = simpleDateFormat.format("lightning.data");
-
+    public void isLightningStartTimeValid() throws ParseException {
         Response rest = getApi();
-        rest.then()
-    		.body("lightning.startTime", 
-                instanceOf(Timestamp.class)
-            );
+        JsonPath path = JsonPath.from(rest.getBody().asInputStream());
+        String startTimeString = path.get("lightning.startTime");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
+        Date startTime = format.parse(startTimeString);
+        assertThat("Start time is not valid", startTime instanceof Date);
     }
 
-    // @Test(groups={"test"})
-    // public void isLightningEndTimeValid() {
-    //     Response rest = getApi();
-    //     rest.then()
-    //             .body("lightning.endTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?([+/-]\d\d):?(\d\d)?$));?
-    // }
+     @Test(groups={"test"})
+     public void isLightningEndTimeValid() throws ParseException {
+         Response rest = getApi();
+         JsonPath path = JsonPath.from(rest.getBody().asInputStream());
+         String endTimeString = path.get("lightning.endTime");
+         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
+         Date endTime = format.parse(endTimeString);
+         assertThat("End time is not valid", endTime instanceof Date);
+     }
 }

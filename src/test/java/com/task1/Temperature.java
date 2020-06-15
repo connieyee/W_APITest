@@ -1,5 +1,6 @@
 package com.connieyee.test.task1;
 
+import io.restassured.path.json.JsonPath;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
@@ -7,6 +8,10 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
@@ -72,11 +77,13 @@ public class Temperature
     }
 
     @Test(groups={"test"})
-    public void isTemperatureRecordTimeValid() {
+    public void isTemperatureRecordTimeValid() throws ParseException {
         Response rest = getApi();
-        rest.then()
-            .body("$", hasKey("temperature"));
-    		// .body("temperature.recordTime", matchesPattern(^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$));
+        JsonPath path = JsonPath.from(rest.getBody().asInputStream());
+        String startTimeString = path.get("temperature.recordTime");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
+        Date recordTime = format.parse(startTimeString);
+        assertThat("Record time is not valid", recordTime instanceof Date);
     }
    
 }
