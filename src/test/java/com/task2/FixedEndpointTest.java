@@ -1,4 +1,4 @@
-package com.connieyee.test.task2;
+package com.task2;
 
 import org.testng.annotations.Test;
 
