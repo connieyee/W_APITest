@@ -85,6 +85,9 @@ public class Humidity
         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssX");
         Date recordTime = format.parse(recordTimeString);
         assertThat("Record time is not valid", recordTime instanceof Date);
+
+        //Check recordTime is earlier than current time
+        assertThat("Record Time is not earlier than current time",recordTime.compareTo(new Date()) < 0);
     }
    
 }

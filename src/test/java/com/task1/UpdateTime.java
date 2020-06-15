@@ -49,7 +49,7 @@ public class UpdateTime
         Date updateTime = format.parse(updateTimeString);
         assertThat("Update time is not in valid time format", updateTime instanceof Date);
 
-        //Check UpdateTime is earlier than current time
+        //Check updateTime is earlier than current time
         assertThat("Update Time is not earlier than current time",updateTime.compareTo(new Date()) < 0);
     }
 
