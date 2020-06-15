@@ -1,5 +1,13 @@
 package com.connieyee.test.task1;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import io.restassured.path.json.JsonPath;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeClass;
 
@@ -8,8 +16,10 @@ import io.restassured.response.Response;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.*;
 
+import io.restassured.response.Response;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
 
 
 public class Icon
@@ -36,33 +46,12 @@ public class Icon
     public void isIconValid() {
         // WIP
         Response rest = getApi();
-        rest.then()
-    		.body("icon",
-                hasItem(
-                    anyOf(
-                        allOf(
-                            hasEntry(equalTo("value"), greaterThanOrEqualTo(50)),
-                            hasEntry(equalTo("value"), lessThanOrEqualTo(54))
-                        ),
-                        allOf(
-                            hasEntry(equalTo("value"), greaterThanOrEqualTo(60)),
-                            hasEntry(equalTo("value"), lessThanOrEqualTo(65))
-                        ),
-                        allOf(
-                            hasEntry(equalTo("value"), greaterThanOrEqualTo(70)),
-                            hasEntry(equalTo("value"), lessThanOrEqualTo(77))
-                        ),
-                        allOf(
-                            hasEntry(equalTo("value"), greaterThanOrEqualTo(80)),
-                            hasEntry(equalTo("value"), lessThanOrEqualTo(85))
-                        ),
-                        allOf(
-                            hasEntry(equalTo("value"), greaterThanOrEqualTo(90)),
-                            hasEntry(equalTo("value"), lessThanOrEqualTo(93))
-                        )
-                    )
-                )
-            );
+        JsonPath path = JsonPath.from(rest.getBody().asInputStream());
+        List<Integer> icons = path.get("icon");
+        List<Integer> acceptableIcons = Arrays.asList(50,51,52,53,54,60,61,62,63,64,65,70,71,72,73,74,75,76,77,80,81,82,83,84,85,90,91,92,93);
+
+       assertThat("Icon is not valid", acceptableIcons.containsAll(icons));
+
     }
 
 }
