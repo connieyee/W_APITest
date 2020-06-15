@@ -10,9 +10,10 @@ https://data.weather.gov.hk/weatherAPI/opendata/weather.php
 Request Example
 https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en
 
-For API Test Report Please access
+For API Test Report, Please access
+```
 ${path}\WeatherAPITest-master\WeatherAPITest-master\APITestReport.html
-
+```
 
 Task 2 is a script for a fixed endpoint which return code is 200 upon success.
 
@@ -25,7 +26,11 @@ Task 2 is a script for a fixed endpoint which return code is 200 upon success.
 ## Usage
 
 Task 1:
+```
 maven clean test -Dtest=APIRunner
+```
 
 Task 2:
+```
 maven clean test -Dtest=FixedEndpointTest -Dpath={path}
+```
