@@ -27,10 +27,10 @@ Task 2 is a script for a fixed endpoint which return code is 200 upon success.
 
 Task 1:
 ```
-maven clean test -Dtest=APIRunner
+mvn clean test -Dtest=APIRunner
 ```
 
 Task 2:
 ```
-maven clean test -Dtest=FixedEndpointTest -Dpath={path}
+mvn clean test -Dtest=FixedEndpointTest -Dpath={path}
 ```
